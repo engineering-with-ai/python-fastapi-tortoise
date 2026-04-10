@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
@@ -13,7 +15,7 @@ class TestExampleResource:
     @pytest.mark.asyncio
     async def test_can_create_and_retrieve_example_from_database_via_http(self) -> None:
         """Test that an Example can be created via service layer and retrieved via HTTP endpoint."""
-        with start_postgres() as pg:
+        with start_postgres(password=os.environ["POSTGRES_PASSWORD"]) as pg:
             # Initialize Tortoise manually for testing
             await Tortoise.init(
                 db_url=pg.url,
